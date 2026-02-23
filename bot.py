@@ -171,7 +171,7 @@ async def main() -> None:
     logger.info("Zamanlayıcı başlatıldı: her %d saniyede bir kontrol.", CHECK_INTERVAL)
 
     try:
-        logger.info("Bot başlatılıyor...")
+        logger.warning("Bot başlatılıyor... Aynı anda sadece 1 bot çalışabilir!")
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
         scheduler.shutdown()
