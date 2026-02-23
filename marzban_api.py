@@ -2,8 +2,17 @@
 Marzban API istemcisi - async httpx ile v0.8.4 API çağrıları
 """
 import logging
+import warnings
 import httpx
 from typing import Any
+
+# Self-signed SSL sertifikası uyarılarını bastır
+warnings.filterwarnings("ignore", message="Unverified HTTPS request")
+try:
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+except Exception:
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +31,7 @@ class MarzbanAPI:
         """Admin token'ı al veya mevcut olanı döndür."""
         if self._token:
             return self._token
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
             resp = await client.post(
                 f"{self.base_url}/api/admin/token",
                 data={"username": self.username, "password": self.password},
@@ -41,7 +50,7 @@ class MarzbanAPI:
         if refresh:
             self._token = None
         token = await self._get_token()
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
             resp = await client.request(
                 method,
                 f"{self.base_url}{path}",
@@ -59,7 +68,8 @@ class MarzbanAPI:
         try:
             await self._get_token()
             return True
-        except Exception:
+        except Exception as exc:
+            logger.error("Panel connection error [%s]: %s", self.base_url, exc)
             return False
 
     async def get_users(self, page: int = 1, size: int = 100) -> dict:
