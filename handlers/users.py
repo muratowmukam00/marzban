@@ -3,7 +3,7 @@ Kullanıcı listeleme ve limit koyma handler'ları
 Panel seç → Kullanıcı seç → Limit belirle
 Ayrıca subscription link ile limit koyma
 """
-import re
+from urllib.parse import urlparse
 
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
@@ -263,15 +263,23 @@ async def form_link_input(message: Message, state: FSMContext) -> None:
     lang = await db.get_user_lang(tg_id)
     link = message.text.strip()
 
-    # Subscription link formatı: https://panel.example.com:8080/sub/USERNAME/...
-    # veya https://panel.example.com:8080/api/sub/USERNAME
-    match = re.search(r"/sub/([^/?#\s]+)", link)
-    if not match:
+    # URL'nin path kısmından son segmenti al (son non-"sub" parçası = kullanıcı adı)
+    # Örnek formatlar:
+    #   https://panel.com/sub/USERNAME
+    #   https://panel.com/sub/sub/USERNAME
+    #   https://panel.com/api/sub/ENCODED_STRING
+    parsed = urlparse(link)
+    path_parts = [p for p in parsed.path.split("/") if p]
+    marzban_user = None
+    for part in reversed(path_parts):
+        if part.lower() != "sub":
+            marzban_user = part
+            break
+    if not marzban_user:
         await message.answer(t(lang, "link_invalid"))
         await state.clear()
         return
 
-    marzban_user = match.group(1)
     panels = await db.get_panels(tg_id)
     if not panels:
         await message.answer(t(lang, "no_panels"))

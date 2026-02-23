@@ -22,7 +22,7 @@ class MarzbanAPI:
         """Admin token'ı al veya mevcut olanı döndür."""
         if self._token:
             return self._token
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
             resp = await client.post(
                 f"{self.base_url}/api/admin/token",
                 data={"username": self.username, "password": self.password},
@@ -41,7 +41,7 @@ class MarzbanAPI:
         if refresh:
             self._token = None
         token = await self._get_token()
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
             resp = await client.request(
                 method,
                 f"{self.base_url}{path}",
