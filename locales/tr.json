@@ -18,7 +18,7 @@
   "panel_enter_password": "🔑 Admin şifresini girin:",
   "panel_connecting": "⏳ Bağlanılıyor...",
   "panel_connected": "✅ Panel başarıyla bağlandı!\n\n🔗 <b>URL:</b> {url}\n👤 <b>Kullanıcı:</b> {username}",
-  "panel_error": "❌ Bağlantı hatası! Lütfen bilgileri kontrol edin.",
+  "panel_error": "❌ Bağlantı hatası!\n\nOlası sebepler:\n• URL yanlış veya erişilemiyor\n• Kullanıcı adı veya şifre hatalı\n• Panel çevrimdışı\n• SSL sertifika sorunu\n\nLütfen bilgileri kontrol edip tekrar deneyin.",
   "panel_list_empty": "📭 Bağlı panel bulunamadı.\n\n🔗 Panel Bağla butonunu kullanın.",
   "panel_list_header": "🖥️ <b>Bağlı Panelleriniz:</b>",
   "panel_select": "Bir panel seçin:",

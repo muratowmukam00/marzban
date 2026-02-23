@@ -2,6 +2,7 @@
 Panel bağlama handler'ları
 Kullanıcı URL → username → password girer; API test edilir
 """
+import logging
 from datetime import datetime, timezone
 
 from aiogram import Router, F
@@ -16,6 +17,7 @@ from handlers.i18n import t
 from handlers.keyboards import main_menu_keyboard, cancel_keyboard
 
 router = Router()
+logger = logging.getLogger(__name__)
 
 
 class PanelForm(StatesGroup):
@@ -88,6 +90,7 @@ async def form_password(message: Message, state: FSMContext) -> None:
     success = await api.test_connection()
 
     if not success:
+        logger.warning("Panel connection failed: url=%s user=%s", url, username)
         await connecting_msg.edit_text(t(lang, "panel_error"))
         return
 

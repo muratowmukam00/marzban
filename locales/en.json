@@ -18,7 +18,7 @@
   "panel_enter_password": "🔑 Enter the admin password:",
   "panel_connecting": "⏳ Connecting...",
   "panel_connected": "✅ Panel connected successfully!\n\n🔗 <b>URL:</b> {url}\n👤 <b>User:</b> {username}",
-  "panel_error": "❌ Connection error! Please check your credentials.",
+  "panel_error": "❌ Connection error!\n\nPossible causes:\n• URL is incorrect or unreachable\n• Wrong username or password\n• Panel is offline\n• SSL certificate issue\n\nPlease check your details and try again.",
   "panel_list_empty": "📭 No panels connected.\n\nUse the Connect Panel button.",
   "panel_list_header": "🖥️ <b>Your Connected Panels:</b>",
   "panel_select": "Select a panel:",
